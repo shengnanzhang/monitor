@@ -1,8 +1,10 @@
 #!/bin/bash
 #set -x
 
+#key的定义要尽量复杂，避免和业务的key冲突了
 readonly KEY="monitor_saas_ops"
 readonly VALUE="saas_ops"
+
 readonly TTL="5"
 readonly COMMAND="redis-cli"
 readonly TIMESEC="3"

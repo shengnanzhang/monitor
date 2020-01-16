@@ -15,8 +15,10 @@ readonly VALUE="saas_ops"
 #定义的是监控key的失效时间
 readonly TTL="5"
 readonly COMMAND="redis-cli"
+
 #定义的是命令执行的超时时间
 readonly TIMESEC="3"
+
 #将输出结果默认赋值
 result="-1"
 redis_status="-1"

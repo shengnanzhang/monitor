@@ -1,6 +1,13 @@
 #!/bin/bash
 #set -x
 
+#使用说明：默认情况下，仅需要修改5-7行的SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
+readonly SERVER="10.0.0.1"
+readonly PORT="6379"
+readonly PASSWORD="11111111"
+
+
+
 #key的定义要尽量复杂，避免和业务的key冲突了
 readonly KEY="monitor_saas_ops"
 readonly VALUE="saas_ops"
@@ -50,10 +57,6 @@ function check_result
 
 function main
 {
-    readonly SERVER="10.0.0.1"
-    readonly PORT="6379"
-    readonly PASSWORD="11111111"
-
     check_tools
     redis_set_key
     redis_get_key

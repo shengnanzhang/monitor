@@ -1,7 +1,8 @@
 #!/bin/bash
 #set -x
 
-#使用说明：默认情况下，仅需要修改6-8行的SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
+#使用说明：
+#默认情况下，仅需要修改7-9行的SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
 
 readonly SERVER="10.0.0.1"
 readonly PORT="6379"

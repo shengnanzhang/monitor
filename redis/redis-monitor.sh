@@ -50,9 +50,9 @@ function check_result
 
 function main
 {
-    readonly SERVER="redis-8q1atwdwpst3-proxy-nlb.jvessel-open-sh.jdcloud.com"
+    readonly SERVER="10.0.0.1"
     readonly PORT="6379"
-    readonly PASSWORD="MXtVqY3UHzuq"
+    readonly PASSWORD="11111111"
 
     check_tools
     redis_set_key

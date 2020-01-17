@@ -6,7 +6,7 @@
 #默认情况下，仅需要修改SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
 
 readonly SERVER="redis-8q1atwdwpst3-proxy-nlb.jvessel-open-sh.jdcloud.com"
-readonly PASSWORD="MXtVqY3UHzuq"
+readonly PASSWORD="1111111111"
 readonly PORT="6379"
 
 #key的定义要尽量复杂，避免和业务的key冲突了

@@ -1,20 +1,19 @@
 #!/bin/bash
 #set -x
+#set encoding=utf-8
 
 #使用说明：
-#默认情况下，仅需要修改7-9行的SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
+#默认情况下，仅需要修改SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
 
-readonly SERVER="10.0.0.1"
-readonly PASSWORD="11111111"
+readonly SERVER="redis-8q1atwdwpst3-proxy-nlb.jvessel-open-sh.jdcloud.com"
+readonly PASSWORD="MXtVqY3UHzuq"
 readonly PORT="6379"
 
-
 #key的定义要尽量复杂，避免和业务的key冲突了
-readonly KEY="monitor_saas_ops"
-readonly VALUE="saas_ops"
-
+KEY=$[$RANDOM]
+VALUE=$(cat /root/messages)
 #定义的是监控key的失效时间
-readonly TTL="5"
+readonly TTL="60"
 readonly COMMAND="redis-cli"
 
 #定义的是命令执行的超时时间
@@ -32,6 +31,9 @@ function check_tools
         nohup yum install -y epel-release >/dev/null 2>&1
         nohup yum install -y redis >/dev/null 2>&1
     fi
+
+    mkdir -p  /var/lib/node_exporter/textfile
+    cd /var/lib/node_exporter/textfile && touch redis_monitor.prom && chmod 755 redis_monitor.prom
 }
 
 # 往redis中添加一个key，并设置key的过期时间较短
@@ -55,9 +57,9 @@ function redis_get_key
 function check_result
 {
     if [ "$result" == "$VALUE" ];then
-        echo "status : 0"
+        cd /var/lib/node_exporter/textfile && echo "redis_monitor_status 0" > redis_monitor.prom
     else
-        echo "status : 1"
+        cd /var/lib/node_exporter/textfile && echo "redis_monitor_status 1" > redis_monitor.prom
     fi
 }
 

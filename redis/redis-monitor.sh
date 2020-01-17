@@ -10,7 +10,7 @@ readonly PASSWORD="1111111111"
 readonly PORT="6379"
 
 #key的定义要尽量复杂，避免和业务的key冲突了
-KEY=$[$RANDOM]
+KEY=$((RANDOM))
 VALUE=$(cat /root/messages)
 #定义的是监控key的失效时间
 readonly TTL="60"

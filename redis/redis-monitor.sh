@@ -21,7 +21,6 @@ readonly TIMESEC="3"
 
 #将输出结果默认赋值
 result="-1"
-redis_status="-1"
 
 #判断是否安装了redis-cli工具，如果没有安装则先安装完毕
 #安装redis-cli工具，需要先安装epel源才可以

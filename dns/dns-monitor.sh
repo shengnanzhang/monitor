@@ -5,7 +5,6 @@
 #使用说明：
 
 readonly DOMAIN="mysql-cn-east-2-01a7e0233e934844.rds.jdcloud.com"
-readonly TYPE="A"
 readonly COMMAND="dig"
 
 #定义的是命令执行的超时时间

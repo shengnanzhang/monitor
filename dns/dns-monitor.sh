@@ -6,10 +6,6 @@
 
 readonly DOMAIN="mysql-cn-east-2-01a7e0233e934844.rds.jdcloud.com"
 readonly TYPE="A"
-
-#key的定义要尽量复杂，避免和业务的key冲突了
-#定义的是监控key的失效时间
-readonly TTL="60"
 readonly COMMAND="dig"
 
 #定义的是命令执行的超时时间

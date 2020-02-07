@@ -47,10 +47,6 @@ function monitor_action
     timeout $TIMESEC $COMMAND -h $SERVER -u $USER -p$PASSWORD -D$DATABASE -e "delete from test where id=7;"
 }
 
-
-
-
-
 function check_result
 {
     if [ $result!=0 ]; then

@@ -23,12 +23,11 @@ function check_prometheus
 function check_result
 {
     result=$( timeout $TIMESEC curl -s $URL)
-    cd /var/lib/node_exporter/textfile
 
     if [ "$result" == "$VALUE" ];then
-        echo "s3_monitor_status 0" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 0" > s3_monitor.prom
     else
-        echo "s3_monitor_status 1" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 1" > s3_monitor.prom
     fi
 }
 

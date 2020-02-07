@@ -13,7 +13,7 @@ result="-1"
 s3_monitor_status="-1"
 
 #检查输出文件的目录，文件和权限
-function check_tools
+function check_prometheus
 {
     mkdir -p  /var/lib/node_exporter/textfile
     cd /var/lib/node_exporter/textfile && touch s3_monitor.prom && chmod 755 s3_monitor.prom
@@ -34,7 +34,7 @@ function check_result
 
 function main
 {
-    check_tools
+    check_prometheus
     check_result
 }
 

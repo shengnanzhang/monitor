@@ -23,9 +23,9 @@ function check_prometheus
 #通过云存储的接口获取指定文件的内容并和预先定义的内容进行比对
 function check_result
 {
-    result=$( timeout $TIMESEC curl -s $URL)
+    result=$( timeout $TIMESEC curl -s $URL 2>/dev/null |grep -c  $VALUE)
 
-    if [ "$result" == "$VALUE" ];then
+    if [ "$result" -gt 1 ];then
         cd /var/lib/node_exporter/textfile && echo "lb_monitor_status 0" > lb_monitor.prom
     else
         cd /var/lib/node_exporter/textfile && echo "lb_monitor_status 1" > lb_monitor.prom

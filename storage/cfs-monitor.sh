@@ -2,7 +2,7 @@
 #set -x
 #set encoding=utf-8
 
-#定义的是基准文件的内容
+#定义的是基准文件的内容，内容本身是什么并无所谓，需要关注的是写入内容的长度，体积，是否有特殊字符串，换行等等
 readonly VALUE="abcdefghijklmnopqrstuvwxyz1234567890"
 
 #定义的是命令执行的超时时间

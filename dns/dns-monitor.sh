@@ -52,7 +52,7 @@ function main
 {  
     check_tools
     check_prometheus
-    dig_action
+    monitor_action
     check_result
 }
 

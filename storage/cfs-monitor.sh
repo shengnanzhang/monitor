@@ -3,7 +3,7 @@
 #set encoding=utf-8
 
 #定义的是基准文件的内容
-readonly VALUE="successsuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccesssuccess"
+readonly VALUE="abcdefghijklmnopqrstuvwxyz1234567890"
 
 #定义的是命令执行的超时时间
 readonly TIMESEC="3"

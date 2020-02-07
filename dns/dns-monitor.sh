@@ -3,11 +3,8 @@
 #set encoding=utf-8
 
 #使用说明：
-#默认情况下，仅需要修改SERVER、PORT、PASSWORD的值，即可执行脚本进行对mysql服务的可用性监控
-
 
 readonly DOMAIN="mysql-cn-east-2-01a7e0233e934844.rds.jdcloud.com"
-#readonly DOMAIN="mysql-cn-east-2-01a7e0233e9348445.rds.jdcloud.com"
 readonly TYPE="A"
 
 #key的定义要尽量复杂，避免和业务的key冲突了

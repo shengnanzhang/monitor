@@ -11,9 +11,9 @@ readonly PORT="6379"
 
 #key的定义要尽量复杂，避免和业务的key冲突了
 KEY=$((RANDOM))
-VALUE=$(cat /root/messages)
+VALUE="abcdefghijklmnopqrstuvwxyz1234567890"
 #定义的是监控key的失效时间
-readonly TTL="60"
+readonly TTL="3"
 readonly COMMAND="redis-cli"
 
 #定义的是命令执行的超时时间

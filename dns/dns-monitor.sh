@@ -17,7 +17,7 @@ result="-1"
 function check_tools
 {
     if [ ! -f /usr/bin/dig ];then
-        nohup yum install -y dig >/dev/null 2>&1
+        nohup yum install -y bind-utils >/dev/null 2>&1
     fi
 
     mkdir -p  /var/lib/node_exporter/textfile 

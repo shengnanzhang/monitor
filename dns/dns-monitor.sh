@@ -4,6 +4,8 @@
 
 #使用说明：
 
+#域名的选择要求：尽量不要使用线上的域名进行监控，而应该使用线上同一个zone的，自己申请的域名，避免线上域名IP变换后，导致的不必要的报警
+#需要注意的是：同一个zone是需要了解细节的，可能不同的二级域名归属于不同的dns-server维护，需要了解这个细节，最好是知道每个master是谁
 readonly DOMAIN="mysql-cn-east-2-01a7e0233e934844.rds.jdcloud.com"
 readonly COMMAND="dig"
 readonly IP="10.0.128.4"

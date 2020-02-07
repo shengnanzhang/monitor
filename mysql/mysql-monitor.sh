@@ -32,7 +32,10 @@ function check_tools
         nohup yum install -y epel-release >/dev/null 2>&1
         nohup yum install -y mysql >/dev/null 2>&1
     fi
+}
 
+function check_prometheus
+{
     mkdir -p  /var/lib/node_exporter/textfile 
     cd /var/lib/node_exporter/textfile && touch mysql_monitor.prom && chmod 755 mysql_monitor.prom
 }
@@ -77,6 +80,7 @@ function main
 {  
     content=""
     check_tools
+    check_prometheus
     metric="mysql_monitor_insert"
     insert_status=$(mysql_insert)
     #insert_status=$(check_result)

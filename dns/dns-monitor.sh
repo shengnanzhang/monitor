@@ -10,12 +10,13 @@
 # 未实现的功能5：为了便于定位异常发生在哪个阶段，最好是对DNS分发的整个过程的各个环节都进行dig，这样就比较容易找出是哪个环节的问题
 
 #域名的选择要求：尽量不要使用线上的域名进行监控，而应该使用线上同一个zone的，自己申请的域名，避免线上域名IP变换后，导致的不必要的报警
-readonly DOMAIN="mysql-cn-east-2-01a7e0233e934844.rds.jdcloud.com"
-readonly COMMAND="dig"
-readonly IP="10.0.128.4"
+readonly DOMAIN="monitor.site7x24.net.cn"
+readonly IP="1.1.1.1"
 
 #定义的是命令执行的超时时间
 readonly TIMESEC="3"
+
+readonly COMMAND="dig"
 
 #将输出结果默认赋值
 result="-1"

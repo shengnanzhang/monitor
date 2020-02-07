@@ -8,6 +8,7 @@ readonly VALUE="success"
 #定义的是命令执行的超时时间
 readonly TIMESEC="3"
 
+#文件名的随机后缀变量
 KEY=$[$RANDOM]
 
 readonly MONITOR_PATH="/cfs-monitor/monitor"

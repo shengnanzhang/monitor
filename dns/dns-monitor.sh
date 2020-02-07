@@ -19,6 +19,7 @@ readonly TIMESEC="3"
 
 #将输出结果默认赋值
 result="-1"
+dns_monitor_status="-1"
 
 #判断是否安装了dig工具，如果没有安装则先安装bind-utils包
 #判断是否提供了

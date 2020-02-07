@@ -11,6 +11,7 @@ readonly TIMESEC="3"
 #文件名的随机后缀变量
 KEY=$[$RANDOM]
 
+#定义的是功能监控的写入目录
 readonly MONITOR_PATH="/cfs-monitor/monitor"
 
 #将输出结果默认赋值

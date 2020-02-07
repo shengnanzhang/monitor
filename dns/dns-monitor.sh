@@ -36,6 +36,7 @@ function check_prometheus
 # 增加timeout命令，限制执行时间，避免超时卡死
 # 增加+short是为了让返回值仅仅返回IP地址，增加sort是为了让IP排序后进行检查，目前暂未考虑多个IP地址的问题
 # 如对可能，可以使用dig www.baidu.com +short @dns-master来直接检查master上ip生效的情况，避免延时生效导致大规模故障的发生
+# 更进一步的，为了便于定位异常发生在哪个阶段，最好是对DNS分发的整个过程的各个环节都进行dig，这样就比较容易找出是哪个环节的问题
 function monitor_action
 {
     result=$(timeout $TIMESEC $COMMAND $DOMAIN +short|sort)

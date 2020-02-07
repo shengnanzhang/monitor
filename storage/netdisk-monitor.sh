@@ -13,7 +13,7 @@ result="-1"
 netdisk_monitor_status="-1"
 
 #检查输出文件的目录，文件和权限
-function check_tools
+function check_prometheus
 {
     mkdir -p  /var/lib/node_exporter/textfile
     cd /var/lib/node_exporter/textfile && touch netdisk_monitor.prom && chmod 755 netdisk_monitor.prom
@@ -22,21 +22,22 @@ function check_tools
 #通过云硬盘写入文件后读取检查云硬盘的可用性
 function check_result
 {
-    cd /tmp && timeout $TIMESEC rm -f netdisk_monitor
+    cd /tmp && timeout $TIMESEC /usr/bin/rm -f netdisk_monitor
+    
     cd /tmp && timeout $TIMESEC echo $VALUE > netdisk_monitor
+    
     result=$( timeout $TIMESEC cat /tmp/netdisk_monitor)
 
-    cd /var/lib/node_exporter/textfile
     if [ "$result" == "$VALUE" ];then
-        echo "netdisk_monitor_status 0" > netdisk_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "netdisk_monitor_status 0" > netdisk_monitor.prom
     else
-        echo "netdisk_monitor_status 1" > netdisk_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "netdisk_monitor_status 1" > netdisk_monitor.prom
     fi
 }
 
 function main
 {
-    check_tools
+    check_prometheus
     check_result
 }
 

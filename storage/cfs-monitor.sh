@@ -33,7 +33,7 @@ function check_result
     
     result=$( timeout $TIMESEC   cat $MONITOR_PATH/cfs_monitor.$KEY)
     
-    cd $MONITOR_PATH && timeout $TIMESEC rm -f cfs_monitor.$KEY
+    cd $MONITOR_PATH && timeout $TIMESEC /usr/bin/rm -f cfs_monitor.$KEY
     
     if [ "$result" == "$VALUE" ];then
         cd /var/lib/node_exporter/textfile && echo "cfs_monitor_status 0" > cfs_monitor.prom

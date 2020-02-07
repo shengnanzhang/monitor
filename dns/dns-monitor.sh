@@ -6,6 +6,7 @@
 
 readonly DOMAIN="mysql-cn-east-2-01a7e0233e934844.rds.jdcloud.com"
 readonly COMMAND="dig"
+readonly IP="10.0.128.4"
 
 #定义的是命令执行的超时时间
 readonly TIMESEC="3"
@@ -13,46 +14,46 @@ readonly TIMESEC="3"
 #将输出结果默认赋值
 result="-1"
 
-#判断是否安装了工具，如果没有安装则先安装完毕
+#判断是否安装了dig工具，如果没有安装则先安装bind-utils包
+#判断是否提供了
 function check_tools
 {
     if [ ! -f /usr/bin/dig ];then
         nohup yum install -y bind-utils >/dev/null 2>&1
     fi
+}
 
+#检查输出到prometheus的目录和文件是否存在，以及权限是否正确
+function check_prometheus
+{
     mkdir -p  /var/lib/node_exporter/textfile 
     cd /var/lib/node_exporter/textfile && touch dns_monitor.prom && chmod 755 dns_monitor.prom
 }
 
 # dig 域名解析
 # 增加timeout命令，限制执行时间，避免超时卡死
-# 不关注命令执行的返回值，没有任何意义，需要通过获取key:value来判断才更合理
-function dig_action
+# 增加+short是为了让返回值仅仅返回IP地址，增加sort是为了让IP排序后进行检查，目前暂未考虑多个IP地址的问题
+function monitor_action
 {
-    result=$(timeout $TIMESEC $COMMAND $DOMAIN |grep "ANSWER SECTION")
-    echo "$?"
+    result=$(timeout $TIMESEC $COMMAND $DOMAIN +short|sort)
 }
 
 #对获取的value和预先定义好的value进行对比，判断结果是否正常
 function check_result
 {
-    if [ "$result"!="" ]; then
-        echo 0
-        #cd /var/lib/node_exporter/textfile && echo "mysql_monitor_status 0" > mysql_monitor.prom
+    if [ "$result" == "$IP" ]; then
+        cd /var/lib/node_exporter/textfile && echo "dns_monitor_status 0" >  dns_monitor.prom
     else
-        echo 1
-        #cd /var/lib/node_exporter/textfile && echo "mysql_monitor_status 1" > mysql_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "dns_monitor_status 1" >  dns_monitor.prom
     fi
 }
 
 function main
 {  
-    content=""
     check_tools
-    metric="dns_monitor_status"
+    check_prometheus
     dig_action
-    content="$content$metric $(check_result)\n"
-    cd /var/lib/node_exporter/textfile && echo -e $content > dns_monitor.prom
+    check_result
 }
 
 main

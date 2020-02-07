@@ -2,6 +2,11 @@
 #set -x
 #set encoding=utf-8
 
+#未完成的功能
+#未完成的功能1：没有使用独立的redis的数据库，让监控的数据库和业务的数据库进行隔离
+#未完成的功能2：没有对redis的性能进行采集
+#未完成的功能3：没有对redis的value进行不同取值范围的性能监控
+
 #使用说明：
 #默认情况下，仅需要修改SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
 
@@ -9,7 +14,7 @@ readonly SERVER="redis-8q1atwdwpst3-proxy-nlb.jvessel-open-sh.jdcloud.com"
 readonly PASSWORD="1111111111"
 readonly PORT="6379"
 
-#key的定义要尽量复杂，避免和业务的key冲突了
+#key的定义要尽量复杂，避免和业务的key冲突了，所以增加了一个random的值
 KEY=$((RANDOM))
 VALUE="abcdefghijklmnopqrstuvwxyz1234567890"
 #定义的是监控key的失效时间
@@ -30,7 +35,10 @@ function check_tools
         nohup yum install -y epel-release >/dev/null 2>&1
         nohup yum install -y redis >/dev/null 2>&1
     fi
+}
 
+function check_prometheus
+{
     mkdir -p  /var/lib/node_exporter/textfile
     cd /var/lib/node_exporter/textfile && touch redis_monitor.prom && chmod 755 redis_monitor.prom
 }
@@ -39,18 +47,17 @@ function check_tools
 # 设置过期时间的目的是，避免服务异常不能写入而无法发现
 # 增加timeout命令，限制执行时间，避免超时卡死
 # 不关注命令执行的返回值，没有任何意义，需要通过获取key:value来判断才更合理
-function redis_set_key
-{
-    timeout $TIMESEC $COMMAND -h $SERVER -p $PORT -a $PASSWORD set $KEY $VALUE ex $TTL >/dev/null 2>&1
-}
-
 # 从redis中读取一个key
 # 增加timeout命令，限制执行时间，避免超时卡死
 # 取出一个key之后不能直接删除这个key，通过过期时间删除即可，防止del掉这个key的时候，各种异常导致误删除业务上的key
-function redis_get_key
+
+function monitor_action
 {
+    timeout $TIMESEC $COMMAND -h $SERVER -p $PORT -a $PASSWORD set $KEY $VALUE ex $TTL >/dev/null 2>&1
+    
     result=$(timeout $TIMESEC $COMMAND -h $SERVER -p $PORT -a $PASSWORD get $KEY )
 }
+
 
 #对获取的value和预先定义好的value进行对比，判断redis是否正常
 function check_result
@@ -65,8 +72,8 @@ function check_result
 function main
 {
     check_tools
-    redis_set_key
-    redis_get_key
+    check_prometheus
+    monitor_action
     check_result
 }
 

@@ -8,7 +8,7 @@
 #bs=1MB count=100  的MD5:  0f86d7c5a6180cf9584c1d21144d85b0
 #bs=1MB count=10   的MD5:  311175294563b07db7ea80dee2e5b3c6
 
-readonly MD5="e37115d4da0e187130ab645dee4f14ed"
+readonly MD5="0f86d7c5a6180cf9584c1d21144d85b0"
 
 #定义的是命令执行的超时时间
 readonly TIMESECsmall="3"
@@ -44,12 +44,12 @@ function check_result
     fi
 }
 
-#通过云硬盘写入1000MB文件来测试性能，目前测试，通过dd生成固定大小的文件，其md5是相同的，因此在该处只验证了md5，只要md5正确，就输出写入耗时
+#通过云硬盘写入100MB文件来测试性能，目前测试，通过dd生成固定大小的文件，其md5是相同的，因此在该处只验证了md5，只要md5正确，就输出写入耗时
 #写入耗时部分，增加了纳秒统计，否则，无法进行精确比较date +%s%N，如果不需要纳秒级别统计，可以改为date +%s
 function check_performance
 {
     local Begin_time=$(date +%s%N)
-    cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./cfs_monitor.performance."$KEY" bs=1MB count=1000 2>/dev/null
+    cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./cfs_monitor.performance."$KEY" bs=1MB count=100 2>/dev/null
     local End_time=$(date +%s%N)
     local time_result=$((End_time - Begin_time))
 

@@ -45,11 +45,12 @@ function check_result
 }
 
 #通过云硬盘写入1000MB文件来测试性能，目前测试，通过dd生成固定大小的文件，其md5是相同的，因此在该处只验证了md5，只要md5正确，就输出写入耗时
+#写入耗时部分，增加了纳秒统计，否则，无法进行精确比较date +%s%N，如果不需要纳秒级别统计，可以改为date +%s
 function check_performance
 {
-    Begin_time=$(date +%s)
+    Begin_time=$(date +%s%N)
     cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./cfs_monitor.performance."$KEY" bs=1MB count=1000 2>/dev/null
-    End_time=$(date +%s)
+    End_time=$(date +%s%N)
     time_result=$((End_time - Begin_time))
 
     if [ "$(md5sum cfs_monitor.performance."$KEY"|grep -c $MD5)" -eq 1 ];then

@@ -20,11 +20,6 @@ KEY=$((RANDOM))
 #定义的是功能监控的写入目录
 readonly MONITOR_PATH="/cfs-monitor/monitor"
 
-#将输出结果默认赋值
-result="-1"
-cfs_monitor_status="-1"
-cfs_monitor_time="-1"
-
 #检查输出文件的目录，文件和权限
 function check_prometheus
 {
@@ -38,7 +33,7 @@ function check_result
 {
     cd $MONITOR_PATH && timeout $TIMESECsmall echo $MD5 > cfs_monitor."$KEY"
 
-    result=$( timeout $TIMESECsmall cat $MONITOR_PATH/cfs_monitor."$KEY")
+    local result=$( timeout $TIMESECsmall cat $MONITOR_PATH/cfs_monitor."$KEY")
 
     cd $MONITOR_PATH && timeout $TIMESECsmall /usr/bin/rm -f cfs_monitor."$KEY"
 

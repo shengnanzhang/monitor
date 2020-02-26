@@ -44,7 +44,7 @@ function check_result
     fi
 }
 
-#通过云硬盘写入1000MB文件来测试性能
+#通过云硬盘写入1000MB文件来测试性能，目前测试，通过dd生成固定大小的文件，其md5是相同的，因此在该处只验证了md5，只要md5正确，就输出写入耗时
 function check_performance
 {
     Begin_time=$(date +%s)

@@ -15,7 +15,7 @@ readonly TIMESECsmall="3"
 readonly TIMESEClarge="20"
 
 #文件名的随机后缀变量
-KEY=$((RANDOM))
+readonly KEY=$((RANDOM))
 
 #定义的是功能监控的写入目录
 readonly MONITOR_PATH="/cfs-monitor/monitor"

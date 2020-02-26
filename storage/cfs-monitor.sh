@@ -51,7 +51,6 @@ function check_result
 
 #通过云硬盘写入1000MB文件来测试性能，目前测试，通过dd生成固定大小的文件，其md5是相同的，因此在该处只验证了md5，只要md5正确，就输出写入耗时
 #写入耗时部分，增加了纳秒统计，否则，无法进行精确比较date +%s%N，如果不需要纳秒级别统计，可以改为date +%s
-#需要注意的是，End_time和Begin_time，不要在其他地方引用
 function check_performance
 {
     local Begin_time=$(date +%s%N)

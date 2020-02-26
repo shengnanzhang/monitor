@@ -1,6 +1,7 @@
 #!/bin/bash
 #set -x
 #set encoding=utf-8
+#代码规范遵循shellcheck.net的要求
 
 #定义的是基准文件的内容，内容本身是什么并无所谓，需要关注的是写入内容的长度，体积，是否有特殊字符串，换行等等
 #bs=1MB count=1000 的MD5:  e37115d4da0e187130ab645dee4f14ed

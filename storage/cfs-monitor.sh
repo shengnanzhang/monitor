@@ -56,7 +56,7 @@ function check_performance
     local Begin_time=$(date +%s%N)
     cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./cfs_monitor.performance."$KEY" bs=1MB count=1000 2>/dev/null
     local End_time=$(date +%s%N)
-    time_result=$((End_time - Begin_time))
+    local time_result=$((End_time - Begin_time))
 
     if [ "$(md5sum cfs_monitor.performance."$KEY"|grep -c $MD5)" -eq 1 ];then
         cd /var/lib/node_exporter/textfile && echo "cfs_monitor_time $time_result" >> cfs_monitor.prom

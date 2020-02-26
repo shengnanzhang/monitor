@@ -54,9 +54,9 @@ function check_result
 #需要注意的是，End_time和Begin_time，不要在其他地方引用
 function check_performance
 {
-    Begin_time=$(date +%s%N)
+    local Begin_time=$(date +%s%N)
     cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./cfs_monitor.performance."$KEY" bs=1MB count=1000 2>/dev/null
-    End_time=$(date +%s%N)
+    local End_time=$(date +%s%N)
     time_result=$((End_time - Begin_time))
 
     if [ "$(md5sum cfs_monitor.performance."$KEY"|grep -c $MD5)" -eq 1 ];then

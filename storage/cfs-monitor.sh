@@ -3,6 +3,10 @@
 #set encoding=utf-8
 
 #定义的是基准文件的内容，内容本身是什么并无所谓，需要关注的是写入内容的长度，体积，是否有特殊字符串，换行等等
+#bs=1MB count=1000 的MD5:  e37115d4da0e187130ab645dee4f14ed
+#bs=1MB count=100  的MD5:  0f86d7c5a6180cf9584c1d21144d85b0
+#bs=1MB count=10   的MD5:  311175294563b07db7ea80dee2e5b3c6
+
 readonly MD5="e37115d4da0e187130ab645dee4f14ed"
 
 #定义的是命令执行的超时时间

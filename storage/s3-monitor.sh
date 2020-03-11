@@ -22,12 +22,15 @@ function check_prometheus
 #通过云存储的接口获取指定文件的内容并和预先定义的内容进行比对
 function check_result
 {
+    local start=$(date +%s%N)
     result=$( timeout $TIMESEC curl -s $URL)
+    local end=$(date +%s%N)
+    local cost=$[$end-$start]
 
     if [ "$result" == "$VALUE" ];then
-        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 0" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 1" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 1\ns3_read_cost $cost" > s3_monitor.prom
     fi
 }
 

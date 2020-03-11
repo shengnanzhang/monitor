@@ -113,19 +113,28 @@ function main
     check_tools
 
     metric="es_monitor_create"
+    local start=$(date +%s%N)
     create_result=$(es_mapping_create)
+    local end=$(date +%s%N)
+    local cost=$[$end-$start]
     create_status=$(check_result $create_result)
-    content="$content$metric $create_status\n"
+    content="$content$metric $create_status\nes_create_cost $cost\n"
      
     metric="es_monitor_write"
+    local start=$(date +%s%N)
     write_result=$(es_write)
+    local end=$(date +%s%N)
+    local cost=$[$end-$start]
     write_status=$(check_result $write_result)
-    content="$content$metric $write_status\n"
+    content="$content$metric $write_status\nes_write_cost $cost\n"
     sleep 1 
     metric="es_monitor_read"
+    local start=$(date +%s%N)
     read_status=$(es_read)
+    local end=$(date +%s%N)
+    local cost=$[$end-$start]
     read_status=$(check_result $read_status)
-    content="$content$metric $read_status\n"
+    content="$content$metric $read_status\nes_read_cost $cost\n"
 
     metric="es_monitor_delete"
     delete_result=$(es_delete)

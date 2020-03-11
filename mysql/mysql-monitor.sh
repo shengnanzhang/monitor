@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 #set encoding=utf-8
 
 #使用说明：
@@ -82,14 +82,20 @@ function main
     content=""
     check_tools
     metric="mysql_monitor_insert"
+    local start=$(date +%s%N)
     insert_status=$(mysql_insert)
+    local end=$(date +%s%N)
+    local cost=$[$end-$start]
     #insert_status=$(check_result)
-    content="$content$metric $insert_status\n"
+    content="$content$metric $insert_status\nmysql_insert_cost $cost\n"
     
     metric="mysql_monitor_select"
+    local start=$(date +%s%N)
     select_status=$(mysql_select)
+    local end=$(date +%s%N)
+    local cost=$[$end-$start]
     select_status=$(check_result $select_status)
-    content="$content$metric $select_status\n"
+    content="$content$metric $select_status\nmysql_select_cost $cost\n"
     
     metric="mysql_monitor_status"
     mysql_status=$insert_status&&$select_status

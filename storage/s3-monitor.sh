@@ -28,9 +28,9 @@ function check_result
     local cost=$[$end-$start]
 
     if [ "$result" == "$VALUE" ];then
-        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo "s3_monitor_status 1\ns3_read_cost $cost" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 1\ns3_read_cost $cost" > s3_monitor.prom
     fi
 }
 

@@ -17,43 +17,31 @@ readonly TIMESEClarge="20"
 
 #文件名的随机后缀变量
 readonly KEY=$((RANDOM))
-readonly CFS_ADDR="10.0.2.12:/cfs"
+
 #定义的是功能监控的写入目录
-readonly MONITOR_PATH="/nfs/monitor"
+readonly MONITOR_PATH="/disk-monitor/monitor"
 
 #检查输出文件的目录，文件和权限
 function check_prometheus
 {
     mkdir -p $MONITOR_PATH
     mkdir -p  /var/lib/node_exporter/textfile
-    cd /var/lib/node_exporter/textfile && touch cfs_monitor.prom && chmod 755 cfs_monitor.prom
-}
-
-function check_cfs
-{ 
-    if [ ! -f /usr/bin/nfs-utils ];then
-        nohup yum install -y nfs-utils >/dev/null 2>&1
-    fi
-     message=$(df -h|grep $CFS_ADDR)
-     if [ -z "$message" ]; then
-         mkdir -p /root/nfs
-         mount -t nfs -o vers=3 -o noresvport $CFS_ADDR /root/nfs
-     fi
+    cd /var/lib/node_exporter/textfile && touch disk_monitor.prom && chmod 755 disk_monitor.prom
 }
 
 #通过云硬盘写入文件后读取检查云硬盘的可用性
 function check_result
 {
-    cd $MONITOR_PATH && timeout $TIMESECsmall echo $MD5 > cfs_monitor."$KEY"
+    cd $MONITOR_PATH && timeout $TIMESECsmall echo $MD5 > disk_monitor."$KEY"
 
-    local result=$( timeout $TIMESECsmall cat $MONITOR_PATH/cfs_monitor."$KEY")
+    local result=$( timeout $TIMESECsmall cat $MONITOR_PATH/disk_monitor."$KEY")
 
-    cd $MONITOR_PATH && timeout $TIMESECsmall /usr/bin/rm -f cfs_monitor."$KEY"
+    cd $MONITOR_PATH && timeout $TIMESECsmall /usr/bin/rm -f disk_monitor."$KEY"
 
     if [ "$result" == "$MD5" ];then
-        cd /var/lib/node_exporter/textfile && echo "cfs_monitor_status 0" > cfs_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "disk_monitor_status 0" > disk_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo "cfs_monitor_status 1" > cfs_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "disk_monitor_status 1" > disk_monitor.prom
     fi
 }
 
@@ -62,21 +50,20 @@ function check_result
 function check_performance
 {
     local Begin_time=$(date +%s%N)
-    cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./cfs_monitor.performance."$KEY" bs=1MB count=100 2>/dev/null
+    cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./disk_monitor.performance."$KEY" bs=1MB count=100 2>/dev/null
     local End_time=$(date +%s%N)
     local time_result=$((End_time - Begin_time))
 
-    if [ "$(md5sum cfs_monitor.performance."$KEY"|grep -c $MD5)" -eq 1 ];then
-        cd /var/lib/node_exporter/textfile && echo "cfs_monitor_time_100mb $time_result" >> cfs_monitor.prom
+    if [ "$(md5sum disk_monitor.performance."$KEY"|grep -c $MD5)" -eq 1 ];then
+        cd /var/lib/node_exporter/textfile && echo "disk_monitor_time_100mb $time_result" >> disk_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo "cfs_monitor_time_100mb -1" >> cfs_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "disk_monitor_time_100mb -1" >> disk_monitor.prom
     fi
-    cd $MONITOR_PATH && rm -f cfs_monitor.performance."$KEY"
+    cd $MONITOR_PATH && rm -f disk_monitor.performance."$KEY"
 }
 
 function main
 {
-    check_cfs
     check_prometheus
     check_result
     check_performance

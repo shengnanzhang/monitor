@@ -1,5 +1,5 @@
 #!/bin/bash
-#set -x
+set -x
 #set encoding=utf-8
 
 #未完成的功能

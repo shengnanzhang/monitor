@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -x
 #set encoding=utf-8
-
+source ../log.sh
 #定义的是云存储文件的内容
 readonly VALUE="success"
 
@@ -10,7 +10,7 @@ readonly TIMESEC="3"
 readonly URL="http://monitor.s3-internal.cn-east-2.jdcloud-oss.com/s3-monitor.txt"
 #将输出结果默认赋值
 result="-1"
-s3_monitor_status="-1"
+s3_monitor_status{target="$URL",region="cn-east-2"}="-1"
 
 #检查输出文件的目录，文件和权限
 function check_prometheus
@@ -24,13 +24,14 @@ function check_result
 {
     local start=$(date +%s%N)
     result=$( timeout $TIMESEC curl -s $URL)
+    log_info $result
     local end=$(date +%s%N)
     local cost=$[$end-$start]
 
     if [ "$result" == "$VALUE" ];then
-        cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status{target="$URL",region="cn-east-2"} 0\ns3_read_cost{target="$URL",region="cn-east-2"} $cost" > s3_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 1\ns3_read_cost $cost" > s3_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status{target="$URL",region="cn-east-2"} 1\ns3_read_cost{target="$URL",region="cn-east-2"} $cost" > s3_monitor.prom
     fi
 }
 

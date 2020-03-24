@@ -10,7 +10,7 @@ set -x
 #使用说明：
 #默认情况下，仅需要修改SERVER、PORT、PASSWORD的值，即可执行脚本进行对redis服务的可用性监控
 
-readonly SERVER="redis-8q1atwdwpst3-proxy-nlb.jvessel-open-sh.jdcloud.com"
+readonly SERVER="redis-8uyj8b5ymwt1-proxy-nlb.jvessel-open-sh.jdcloud.com"
 readonly PASSWORD="1111111111"
 readonly PORT="6379"
 
@@ -53,7 +53,7 @@ function check_prometheus
 
 function monitor_action
 {
-    timeout $TIMESEC $COMMAND -h $SERVER -p $PORT -a $PASSWORD set $KEY $VALUE ex $TTL >/dev/null 2>&1
+    timeout $TIMESEC $COMMAND -h $SERVER -p $PORT  set $KEY $VALUE ex $TTL >/dev/null 2>&1
     
     result=$(timeout $TIMESEC $COMMAND -h $SERVER -p $PORT -a $PASSWORD get $KEY )
 }

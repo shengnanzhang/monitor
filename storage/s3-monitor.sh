@@ -26,8 +26,11 @@ function check_result
     result=$( timeout $TIMESEC curl -s $URL)
     local end=$(date +%s%N)
     local cost=$[$end-$start]
+   
+     #目前原因暂未定位，如果下面打印log的部分，放到上面cost的上面，那么耗时就会增加非常多，和用系统的time命令得到的时间相差较大，但放在下面就没有问题
     log_info $result >> $LOGFILE
 
+    
     if [ "$result" == "$VALUE" ];then
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
     else

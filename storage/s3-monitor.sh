@@ -25,8 +25,8 @@ function check_result
     local start=$(date +%s%N)
     result=$( timeout $TIMESEC curl -s $URL)
     local end=$(date +%s%N)
-    log_info $result >> $LOGFILE
     local cost=$[$end-$start]
+    log_info $result >> $LOGFILE
 
     if [ "$result" == "$VALUE" ];then
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom

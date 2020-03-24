@@ -27,7 +27,7 @@ function check_result
     local end=$(date +%s%N)
     local cost=$[$end-$start]
    
-     #目前原因暂未定位，如果下面打印log的部分，放到上面cost的上面，那么耗时就会增加非常多，和用系统的time命令得到的时间相差较大，但放在下面就没有问题
+    #如果下面打印log的部分，放到cost的上面，那么cost的耗时就会增加非常多，比系统的time命令执行整个脚本得到的时间还高
     log_info $result >> $LOGFILE
 
     

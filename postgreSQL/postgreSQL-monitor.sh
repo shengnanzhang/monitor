@@ -4,8 +4,6 @@ set -x
 
 #使用说明：
 #默认情况下，仅需要修改SERVER、PORT、PASSWORD的值，即可执行脚本进行对mysql服务的可用性监控
-#mysql -h mysql-cn-cast-2-01a7e0233e934844.rds.jdcloud.com -U Chaos_monitor1 -PChaos_monitor1 -D monitor -c "select count(*) from test"
-psql -h pg-cast2-10c0167e9bb5449c.rds.jdcloud.com -p5432 -UChaos_monitor1  -dmonitor -f create_table.sql
 
 readonly SERVER="pg-east2-10c0167e9bb5449c.rds.jdcloud.com"
 readonly PORT="5432"
@@ -13,6 +11,7 @@ readonly PASSWORD="Chaosmonitor1"
 readonly USER="Chaos_monitor1"
 readonly DATABASE="monitor"
 readonly localhost=`/sbin/ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"`
+export PGPASSWORD=$PASSWORD
 
 #key的定义要尽量复杂，避免和业务的key冲突了
 #定义的是监控key的失效时间
@@ -29,6 +28,9 @@ insert_status="-1"
 select_status="-1"
 postgreSQL_status="-1"
 
+#psql -h pg-cast2-10c0167e9bb5449c.rds.jdcloud.com -p5432 -UChaos_monitor1  -dmonitor -f psql_create_db.sql
+#psql -h pg-cast2-10c0167e9bb5449c.rds.jdcloud.com -p5432 -UChaos_monitor1  -dmonitor -f psql_create_table.sql
+
 #判断是否安装了mysql-cli工具，如果没有安装则先安装完毕
 #安装mysql-cli工具，需要先安装epel源才可以
 function check_tools
@@ -38,9 +40,8 @@ function check_tools
         nohup yum install -y mysql >/dev/null 2>&1
     fi
 
-    mkdir -P  /var/lib/node_exporter/textfile 
+    mkdir -p  /var/lib/node_exporter/textfile 
     cd /var/lib/node_exporter/textfile && touch postgreSQL_monitor.prom && chmod 755 postgreSQL_monitor.prom
-    export PGPASSWORD=$PASSWORD
 }
 
 # 往mysql中添加一个key，并设置key的过期时间较短
@@ -70,7 +71,7 @@ function postgreSQL_select
 function postgreSQL_delete
 {
     result=$(timeout $TIMESEC $COMMAND -h $SERVER -p $PORT -U $USER  -d$DATABASE -q -c "delete from test where host='$localhost';")
-    if [ -z "$result"];then
+    if [ -z "$result" ];then
         echo 1
     else
         echo 0
@@ -82,7 +83,7 @@ function postgreSQL_delete
 #对获取的value和预先定义好的value进行对比，判断mysql是否正常
 function check_result
 {
-    if [ -z "$*"]; then
+    if [ -z "$*" ]; then
         echo 1
         #cd /var/lib/node_exporter/textfile && echo "postgreSQL_monitor_status 0" > postgreSQL_monitor.prom
     else

@@ -24,10 +24,12 @@ function check_result
 {
     local start=$(date +%s%N)
     result=$( timeout $TIMESEC curl -s $URL)
-    log_info $result
     local end=$(date +%s%N)
     local cost=$[$end-$start]
-
+    
+    #目前原因暂未定位，如果下面打印log的部分，放到上面cost的上面，那么耗时就会增加非常多
+    log_info $result
+    
     if [ "$result" == "$VALUE" ];then
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status{target="$URL",region="cn-east-2"} 0\ns3_read_cost{target="$URL",region="cn-east-2"} $cost" > s3_monitor.prom
     else

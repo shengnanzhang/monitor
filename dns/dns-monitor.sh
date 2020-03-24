@@ -50,9 +50,9 @@ function monitor_action
 function check_result
 {
     if [ "$result" == "$IP" ]; then
-        cd /var/lib/node_exporter/textfile && echo "dns_monitor_status 0" >  dns_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "dns_monitor_status{result=\"$result\"} 0" >  dns_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo "dns_monitor_status 1" >  dns_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "dns_monitor_status{result=\"$result\"} 1" >  dns_monitor.prom
     fi
 }
 

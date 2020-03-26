@@ -1,7 +1,6 @@
 #!/bin/bash
 #set -x
 #set encoding=utf-8
-
 #脚本说明：
 # 未实现的功能1：没有统计DNS请求的耗时，当前超时时间统一设置，无法识别是不可用导致的脚本异常，还是超时导致的异常
 # 未实现的功能2：没有进行加强版功能监控，就是取值为10.0.0.x，x取值为[0-59],时间的分钟数取值，这样就可以知道整体的延时情况
@@ -17,6 +16,8 @@ readonly IP="1.1.1.1"
 readonly TIMESEC="3"
 
 readonly COMMAND="dig"
+
+HOSTVALUE="1.1.1."$(date +%M)
 
 #将输出结果默认赋值
 result="-1"
@@ -42,7 +43,10 @@ function check_prometheus
 # 增加timeout命令，限制执行时间，避免超时卡死
 # 增加+short是为了让返回值仅仅返回IP地址，增加sort是为了让IP排序后进行检查，目前暂未考虑多个IP地址的问题
 function monitor_action
-{
+{   
+    proc="/root/src/monitor/dns/dns-monitor"
+    
+    ll -h &  chmod u+x ${proc} && ${proc} $HOSTVALUE
     result=$(timeout $TIMESEC $COMMAND $DOMAIN +short|sort)
 }
 

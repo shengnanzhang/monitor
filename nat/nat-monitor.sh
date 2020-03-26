@@ -15,7 +15,7 @@ readonly LOGFILE="/var/log/nat-monitor"
 #定义的是命令执行的超时时间
 readonly TIMESEC="30"
 
-readonly COMMAND="/usr/sbin/fping"
+readonly COMMAND="/usr/bin/curl"
 
 #将输出结果默认赋值
 result="-1"
@@ -28,7 +28,7 @@ source ./log.sh
 function check_tools
 {
     if [ ! -f $COMMAND ];then
-        nohup yum install -y fping >/dev/null 2>&1
+        nohup yum install -y curl >/dev/null 2>&1
     fi
 }
 

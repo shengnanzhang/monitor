@@ -58,7 +58,7 @@ function check_result
     expt=`echo $HOSTVALUE | cut -f4 -d "."`
     cost=$[$expt-$real]
     if [ $cost -lt 0 ]; then
-        let cost=60-$cost
+        let cost=60+$cost
     fi
     
     if [ $cost -lt 2 ]; then

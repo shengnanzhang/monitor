@@ -48,14 +48,14 @@ function monitor_action
 {
     proc="/root/src/monitor/dns/dns-monitor"
     ll -h &  chmod u+x ${proc} && ${proc} "$HOSTVALUE"
-    result=$(timeout $TIMESEC $COMMAND $DOMAIN @$NS +short|sort)
+    result=$(timeout $TIMESEC $COMMAND $DOMAIN @"$NS" +short|sort)
 }
 
 #对获取的value和预先定义好的value进行对比，判断结果是否正常
 function check_result
 {
-    real=$(echo $result | cut -f4 -d ".")
-    expt=$(echo $HOSTVALUE | cut -f4 -d ".")
+    real=$(echo "$result" | cut -f4 -d ".")
+    expt=$(echo "$HOSTVALUE" | cut -f4 -d ".")
     cost=$[$expt-$real]
     if [ "$cost" -lt 0 ]; then
         let cost=60+$cost

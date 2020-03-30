@@ -29,7 +29,7 @@ function check_tools
 function check_prometheus
 {
     mkdir -p  /var/lib/node_exporter/textfile
-    cd /var/lib/node_exporter/textfile && touch dns_monitor.prom && chmod 755 dns_monitor.prom
+    cd /var/lib/node_exporter/textfile && touch dns_monitor.prom && chmod 755 dns_monitor.prom && echo > dns_monitor.prom
 }
 
 #对获取的value和预先定义好的value进行对比，判断结果是否正常

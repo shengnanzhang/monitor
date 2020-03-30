@@ -47,21 +47,21 @@ function check_prometheus
 function monitor_action
 {
     proc="/root/src/monitor/dns/dns-monitor"
-    ll -h &  chmod u+x ${proc} && ${proc} $HOSTVALUE
+    ll -h &  chmod u+x ${proc} && ${proc} "$HOSTVALUE"
     result=$(timeout $TIMESEC $COMMAND $DOMAIN @$NS +short|sort)
 }
 
 #对获取的value和预先定义好的value进行对比，判断结果是否正常
 function check_result
 {
-    real=`echo $result | cut -f4 -d "."`
-    expt=`echo $HOSTVALUE | cut -f4 -d "."`
+    real=$(echo $result | cut -f4 -d ".")
+    expt=$(echo $HOSTVALUE | cut -f4 -d ".")
     cost=$[$expt-$real]
-    if [ $cost -lt 0 ]; then
+    if [ "$cost" -lt 0 ]; then
         let cost=60+$cost
     fi
     
-    if [ $cost -lt 2 ]; then
+    if [ "$cost" -lt 2 ]; then
         cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status{target=\"$NS\"} 0\ndnsplus_monitor_cost{target=\"$NS\"} $cost" >  dnsplus_monitor.prom
     else
         cd /var/lib/node_exporter/textfile && echo -e  "dnsplus_monitor_status{target=\"$NS\"} 1\ndnsplus_monitor_cost{target=\"$NS\"} $cost" >  dnsplus_monitor.prom

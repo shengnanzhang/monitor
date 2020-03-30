@@ -54,9 +54,9 @@ function check_result
 	    cost=$((HOSTVALUE + 60 - result ))
 	fi
 
-	cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status{target=\"$NS\"} 0\ndnsplus_monitor_cost{target=\"$NS\"} $cost" >  dnsplus_monitor.prom
+	cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status{target=\"$NS\"} 0\ndnsplus_monitor_cost{target=\"$NS\"} $cost" >>  dnsplus_monitor.prom
     else
-	cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status{target=\"$NS\"} -1\ndnsplus_monitor_cost{target=\"$NS\"} -1" >  dnsplus_monitor.prom
+	cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status{target=\"$NS\"} -1\ndnsplus_monitor_cost{target=\"$NS\"} -1" >>  dnsplus_monitor.prom
 
     fi
 }

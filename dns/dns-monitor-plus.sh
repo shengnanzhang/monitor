@@ -60,7 +60,7 @@ function main
 {
     check_tools
     check_prometheus
-    check_result "$@"
+    check_result  "$@"
 }
 
-main
+main "$@"

@@ -56,7 +56,7 @@ function check_result
 {
     real=$(echo "$result" | cut -f4 -d ".")
     expt=$(echo "$HOSTVALUE" | cut -f4 -d ".")
-    cost=$[$expt-$real]
+    cost=$((expt-real))
     if [ "$cost" -lt 0 ]; then
         let cost=60+$cost
     fi

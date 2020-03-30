@@ -10,7 +10,9 @@ readonly TIMESEC="3"
 readonly COMMAND="dig"
 
 HOSTVALUE=$(date +%M|sed -r 's/0*([0-9])/\1/')
+
 NS=$1
+
 #将输出结果默认赋值
 result="-1"
 
@@ -33,14 +35,17 @@ function check_prometheus
 #对获取的value和预先定义好的value进行对比，判断结果是否正常
 function check_result
 {
+    #判断输入的参数数量是否为1，如果为1，则将NS设置为$1；如果不为1，直接上默认的8.8.8.8
     if [ $# -eq 1 ];then
         NS=$1
     else
         NS="8.8.8.8"
     fi
 
+    #直接将dig的结果获取的IP的最后一位拿出来
     result=$(timeout $TIMESEC $COMMAND $DOMAIN @"$NS" +short|head -n 1|cut -d "." -f4)
 
+    #如果result有结果且结果是数字的话，则进行下面的处理；避免result没有获取到结果就参与计算，导致误报
     if [ "$result" -ge 0 ];then
 	if [ "$HOSTVALUE" -ge "$result" ];then
 	    cost=$((HOSTVALUE - result))

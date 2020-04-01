@@ -41,6 +41,7 @@ function check_result
 
     length=${#Domainlist[@]}
     
+    #此处判断：如果请求成功的域名的数量，达到或者超过域名列表的一半以上，就可以认为，能够连通外网，其实，也可以简单的定义为超过2个就可以
     if [ "$result" -ge "$((length / 2))" ];then
         cd /var/lib/node_exporter/textfile && echo "nat_monitor_status 0" >  nat_monitor.prom
     else

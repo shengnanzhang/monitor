@@ -3,6 +3,7 @@
 #set encoding=utf-8
 #代码规范遵循shellcheck.net的要求
 #建议：使用一个非线上账号进行相关的功能验证，会更加安全，这样即使有问题，也不会将系统文件给误删除！！！
+source ~/.bash_profile
 source ./log.sh
 #定义的是不同体积的文件，其MD5，作为string写入被测试文件来验证文件内容的正确性
 #bs=1MB count=1000 的MD5:  e37115d4da0e187130ab645dee4f14ed
@@ -62,16 +63,16 @@ function check_result
 function check_performance
 {
     local Begin_time=$(date +%s%N)
-    cd $MONITOR_PATH && timeout $TIMESEClarge dd if=/dev/zero of=./cfs_monitor.performance."$KEY" bs=10KB count=10 2>/dev/null
+    timeout $TIMESEClarge dd if=/dev/zero of=$MONITOR_PATH/cfs_monitor.performance."$KEY" bs=1MB count=100 2>/dev/null
     local End_time=$(date +%s%N)
     local time_result=$((End_time - Begin_time))
     log_info "cfs_monitor.performance.$KEY write finished!!! Cost is $time_result" >> $LOGFILE 
-    if [ "$(md5sum cfs_monitor.performance."$KEY"|grep -c $MD5)" -eq 1 ];then
-        cd /var/lib/node_exporter/textfile && echo "cfs_monitor_time_100mb $time_result" >> cfs_monitor.prom
+    if [ "$(ll $MONITOR_PATH/cfs_monitor.performance."$KEY"|awk -F" "  '{print $5}')" -eq 100000000 ];then
+        cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb 0\ncfs_monitor_time_100mb $time_result" >> cfs_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo "cfs_monitor_time_100mb -1" >> cfs_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb -1\ncfs_monitor_time_100mb $time_result" >> cfs_monitor.prom
     fi
-    cd $MONITOR_PATH && rm -f cfs_monitor.performance."$KEY"
+    rm -f $MONITOR_PATH/cfs_monitor.performance."$KEY"
 }
 
 function main

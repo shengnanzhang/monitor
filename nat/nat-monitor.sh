@@ -38,8 +38,14 @@ function check_result
         result=$((result + 1))
     fi
     done
-
-    cd /var/lib/node_exporter/textfile && echo "nat_monitor_status $result" >  nat_monitor.prom
+    
+    length=${#Domainlist[@]}
+    
+    if [ "$length" -ge "$((result -2))" ];then
+        cd /var/lib/node_exporter/textfile && echo "nat_monitor_status $result" >  nat_monitor.prom
+    else
+        cd /var/lib/node_exporter/textfile && echo "nat_monitor_status $result" >  nat_monitor.prom
+    fi
 }
 
 function main

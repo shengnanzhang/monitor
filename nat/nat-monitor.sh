@@ -8,7 +8,7 @@ readonly Domainlist=(www.baidu.com www.qq.com www.kuaishou.com www.toutiao.com)
 #定义的是命令执行的超时时间
 readonly TIMESEC="10"
 
-readonly COMMAND="/usr/bin/curl -s -I"
+readonly COMMAND="/usr/bin/curl"
 
 #将输出结果默认赋值
 result="0"
@@ -33,18 +33,17 @@ function check_prometheus
 function check_result
 {
     for domain in "${Domainlist[@]}";do
-    number=$(timeout "$TIMESEC" "$COMMAND" "$domain" |grep -c HTTP)
+    number=$(timeout "$TIMESEC" "$COMMAND" -s -I "$domain" |grep -c HTTP)
     if [ "$number" -ge 1 ];then
         result=$((result + 1))
     fi
     done
-    
+
     length=${#Domainlist[@]}
-    
-    if [ "$length" -ge "$((result -2))" ];then
-        cd /var/lib/node_exporter/textfile && echo "nat_monitor_status 0" >  nat_monitor.prom
+    if [ "$length" -ge "$((result / 2))" ];then
+        cd /var/lib/node_exporter/textfile && echo "nat_monitor_status $result" >  nat_monitor.prom
     else
-        cd /var/lib/node_exporter/textfile && echo "nat_monitor_status 1" >  nat_monitor.prom
+        cd /var/lib/node_exporter/textfile && echo "nat_monitor_status $result" >  nat_monitor.prom
     fi
 }
 

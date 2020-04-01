@@ -2,8 +2,9 @@
 #set -x
 #set encoding=utf-8
 
-#域名的选择要求：尽量不要使用线上的域名进行监控，而应该使用线上同一个zone的，自己申请的域名，避免线上域名IP变换后，导致的不必要的报警
+#域名的选择要求：找国内的几个大的网站，假设他们不会同时全部故障
 readonly Domainlist=(www.baidu.com www.qq.com www.kuaishou.com www.toutiao.com)
+
 #定义的是命令执行的超时时间
 readonly TIMESEC="10"
 
@@ -11,9 +12,9 @@ readonly COMMAND="/usr/bin/curl -s -I"
 
 #将输出结果默认赋值
 result="0"
+number="0"
 
-#判断是否安装了dig工具，如果没有安装则先安装bind-utils包
-#判断是否提供了
+#判断是否安装了curl工具，如果没有安装则先安装curl包
 function check_tools
 {
     if [ ! -f "$COMMAND" ];then
@@ -33,7 +34,7 @@ function check_result
 {
     for domain in "${Domainlist[@]}";do
     number=$(timeout "$TIMESEC" "$COMMAND" "$domain" |grep -c HTTP)
-    if [ "$number" -eq 1 ];then
+    if [ "$number" -ge 1 ];then
         result=$((result + 1))
     fi
     done
@@ -45,7 +46,6 @@ function main
 {
     check_tools
     check_prometheus
-    monitor_action
     check_result
 }
 

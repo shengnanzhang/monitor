@@ -40,7 +40,8 @@ function check_result
     done
 
     length=${#Domainlist[@]}
-    if [ "$length" -ge "$((result / 2))" ];then
+    
+    if [ "$result" -ge "$((length / 2))" ];then
         cd /var/lib/node_exporter/textfile && echo "nat_monitor_status 0" >  nat_monitor.prom
     else
         cd /var/lib/node_exporter/textfile && echo "nat_monitor_status 1" >  nat_monitor.prom

@@ -1,5 +1,4 @@
 #!/bin/bash
-#set -x
 #set encoding=utf-8
 #代码规范遵循shellcheck.net的要求
 #建议：使用一个非线上账号进行相关的功能验证，会更加安全，这样即使有问题，也不会将系统文件给误删除！！！

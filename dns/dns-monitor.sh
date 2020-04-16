@@ -9,7 +9,7 @@ readonly COMMAND="dig"
 
 HOSTVALUE=$(date +%M|sed -r 's/0*([0-9])/\1/')
 
-Domainlist=(ns1.jdgslb.com ns2.jdgslb.com ns3.jdgslb.com ns4.jdgslb.com ns5.jdgslb.com ns6.jdgslb.com vip1.jdgslb.com vip2.jdgslb.com  freens1.jdgslb.com  freens2.jdgslb.com 103.224.222.222 103.224.222.223)
+Domainlist=(ns1.jdgslb.com ns2.jdgslb.com ns3.jdgslb.com ns4.jdgslb.com ns5.jdgslb.com ns6.jdgslb.com vip1.jdgslb.com vip2.jdgslb.com freens1.jdgslb.com freens2.jdgslb.com 103.224.222.222 103.224.222.223)
 
 #将输出结果默认赋值
 result="-1"
@@ -27,7 +27,7 @@ function check_tools
 function check_prometheus
 {
     mkdir -p  /var/lib/node_exporter/textfile
-    cd /var/lib/node_exporter/textfile && touch dns_monitor.prom && chmod 755 dns_monitor.prom && echo > dns_monitor.prom
+    cd /var/lib/node_exporter/textfile && touch dnsplus_monitor.prom && chmod 755 dnsplus_monitor.prom && echo > dnsplus_monitor.prom
 }
 
 #对获取的value和预先定义好的value进行对比，判断结果是否正常

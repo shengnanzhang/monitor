@@ -8,7 +8,7 @@ readonly COMMAND="dig"
 
 HOSTVALUE=$(date +%M|sed -r 's/0*([0-9])/\1/')
 
-Domainlist=(ns1.jdgslb.com ns2.jdgslb.com ns3.jdgslb.com ns4.jdgslb.com ns5.jdgslb.com ns6.jdgslb.com vip1.jdgslb.com vip2.jdgslb.com 8.8.8.8 114.114.114.114 119.29.29.29 103.224.222.222 103.224.222.223)
+Domainlist=(ns1.jdgslb.com ns2.jdgslb.com ns3.jdgslb.com ns4.jdgslb.com ns5.jdgslb.com ns6.jdgslb.com vip1.jdgslb.com vip2.jdgslb.com 103.224.222.222 103.224.222.223)
 
 #将输出结果默认赋值
 result="-1"

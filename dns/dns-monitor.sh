@@ -36,6 +36,7 @@ function check_result
     count=0
     status_ok=0
     delay_time=0
+    delay_time_max=0
     
     for NS in ${Domainlist[@]};do
         
@@ -56,6 +57,11 @@ function check_result
 	        fi
                 status_ok=$((status_ok + 1 ))
 		delay_time=$((delay_time + cost ))
+		
+	        if [ "$cost" -gt "$delay_time_max" ];then
+                     delay_time_max=$cost
+                fi
+		
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i 0\ndnsplus_monitor_cost_$i $cost" >>  dnsplus_monitor.prom
 	    else
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i -1\ndnsplus_monitor_cost_$i  -1" >>  dnsplus_monitor.prom
@@ -69,6 +75,7 @@ function check_result
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_error $count" >>  dnsplus_monitor.prom
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_ok $status_ok" >>  dnsplus_monitor.prom
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost $cost_time" >>  dnsplus_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost_max $delay_time_max" >>  dnsplus_monitor.prom
 }
 
 function main

@@ -62,7 +62,7 @@ function check_result
         done
     done
     #最后，统计下所有异常的ns的数量，并进行统一输出，用于监控报警
-    cd /var/lib/node_exporter/textfile && echo -e "error_ns_count: $count" >>  dnsplus_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "error_ns_count $count" >>  dnsplus_monitor.prom
 }
 
 function main

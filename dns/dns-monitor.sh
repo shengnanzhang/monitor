@@ -38,7 +38,7 @@ function check_result
 	result=$(timeout $TIMESEC $COMMAND $DOMAIN @"$NS" +short|head -n 1|cut -d "." -f4)
 
 	#如果result有结果且结果是数字的话，则进行下面的处理；避免result没有获取到结果就参与计算，导致误报
-	if [ "$result" -ge 1 ];then
+	if [ "$result" -ge 0 ];then
 	    if [ "$HOSTVALUE" -ge "$result" ];then
 	        cost=$((HOSTVALUE - result ))
 	    else

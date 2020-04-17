@@ -34,6 +34,7 @@ function check_result
 {
     for NS in ${Domainlist[@]};do
         
+	#将NS的域名解析为IP地址，并逐个请求这些IP地址，从而覆盖同一个NS在不同区域的集群
 	nslist=$(timeout $TIMESEC $COMMAND $NS +short)
 	
 	for i in $nslist;do

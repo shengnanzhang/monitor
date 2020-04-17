@@ -34,22 +34,27 @@ function check_prometheus
 function check_result
 {
     for NS in ${Domainlist[@]};do
-	#直接将dig的结果获取的IP的最后一位拿出来
-	result=$(timeout $TIMESEC $COMMAND $DOMAIN @"$NS" +short|head -n 1|cut -d "." -f4)
+        
+	nslist=$(timeout $TIMESEC $COMMAND $NS +short)
+	
+	for i in $nslist;do
+	    #直接将dig的结果获取的IP的最后一位拿出来
+	    result=$(timeout $TIMESEC $COMMAND $DOMAIN @"$i" +short|head -n 1|cut -d "." -f4)
 
-	#如果result有结果且结果是数字的话，则进行下面的处理；避免result没有获取到结果就参与计算，导致误报
-	if [ "$result" -ge 0 ];then
-	    if [ "$HOSTVALUE" -ge "$result" ];then
-	        cost=$((HOSTVALUE - result ))
+	    #如果result有结果且结果是数字的话，则进行下面的处理；避免result没有获取到结果就参与计算，导致误报
+	    if [ "$result" -ge 0 ];then
+	        if [ "$HOSTVALUE" -ge "$result" ];then
+	            cost=$((HOSTVALUE - result ))
+	        else
+	        #对于跨周期的情况，实际时间会小于dns的结果，因此需要加一个60的周期进行补偿
+	            cost=$((HOSTVALUE + 60 - result ))
+	        fi
+
+	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i 0\ndnsplus_monitor_cost_$i $cost" >>  dnsplus_monitor.prom
 	    else
-	    #对于跨周期的情况，实际时间会小于dns的结果，因此需要加一个60的周期进行补偿
-	        cost=$((HOSTVALUE + 60 - result ))
+	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i -1\ndnsplus_monitor_cost_$i  -1" >>  dnsplus_monitor.prom
 	    fi
-
-	    cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$NS 0\ndnsplus_monitor_cost_$NS $cost" >>  dnsplus_monitor.prom
-	else
-	    cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$NS -1\ndnsplus_monitor_cost_$NS  -1" >>  dnsplus_monitor.prom
-	fi
+        done
     done
 }
 

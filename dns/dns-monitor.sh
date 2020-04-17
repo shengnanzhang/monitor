@@ -35,6 +35,7 @@ function check_result
     #计数器，统计请求错误的ns的ip的数量
     count=0
     status_ok=0
+    delay_time=0
     
     for NS in ${Domainlist[@]};do
         
@@ -54,6 +55,7 @@ function check_result
 	            cost=$((HOSTVALUE + 60 - result ))
 	        fi
                 status_ok=$((status_ok + 1 ))
+		delay_time=$((delay_time + cost ))
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i 0\ndnsplus_monitor_cost_$i $cost" >>  dnsplus_monitor.prom
 	    else
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i -1\ndnsplus_monitor_cost_$i  -1" >>  dnsplus_monitor.prom
@@ -65,6 +67,7 @@ function check_result
     #最后，统计下所有异常的ns的数量，并进行统一输出，用于监控报警
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_error $count" >>  dnsplus_monitor.prom
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_ok $status_ok" >>  dnsplus_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost $delay_time" >>  dnsplus_monitor.prom
 }
 
 function main

@@ -56,6 +56,7 @@ function check_result
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i 0\ndnsplus_monitor_cost_$i $cost" >>  dnsplus_monitor.prom
 	    else
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i -1\ndnsplus_monitor_cost_$i  -1" >>  dnsplus_monitor.prom
+	        #如果result没有结果，那么意味着该ns有问题，因此在这里做一个错误响应的计数器
 	        count=$((count + 1 ))
 	    fi
         done

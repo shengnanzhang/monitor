@@ -32,6 +32,9 @@ function check_prometheus
 #对获取的value和预先定义好的value进行对比，判断结果是否正常
 function check_result
 {
+    #计数器，统计请求错误的ns的ip的数量
+    count=0
+    
     for NS in ${Domainlist[@]};do
         
 	#将NS的域名解析为IP地址，并逐个请求这些IP地址，从而覆盖同一个NS在不同区域的集群
@@ -53,9 +56,11 @@ function check_result
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i 0\ndnsplus_monitor_cost_$i $cost" >>  dnsplus_monitor.prom
 	    else
 	        cd /var/lib/node_exporter/textfile && echo -e "dnsplus_monitor_status_$i -1\ndnsplus_monitor_cost_$i  -1" >>  dnsplus_monitor.prom
+	        count=$((count + 1 ))
 	    fi
         done
     done
+    cd /var/lib/node_exporter/textfile && echo -e "error_ns_count: $count" >>  dnsplus_monitor.prom
 }
 
 function main

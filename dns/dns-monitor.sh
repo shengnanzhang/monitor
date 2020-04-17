@@ -73,7 +73,7 @@ function check_result
     done
     #最后，统计下所有异常的ns的数量，并进行统一输出，用于监控报警
     cost_time=$((delay_time / status_ok))
-    cd /var/lib/node_exporter/textfile && echo -e "ns_status_error $count" >>  dns_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "ns_status_error $count" >  dns_monitor.prom
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_ok $status_ok" >>  dns_monitor.prom
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost $cost_time" >>  dns_monitor.prom
     cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost_max $delay_time_max" >>  dns_monitor.prom

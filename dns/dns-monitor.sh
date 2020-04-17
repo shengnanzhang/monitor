@@ -27,6 +27,7 @@ function check_prometheus
 {
     mkdir -p  /var/lib/node_exporter/textfile
     cd /var/lib/node_exporter/textfile && touch dnsplus_monitor.prom && chmod 755 dnsplus_monitor.prom && echo > dnsplus_monitor.prom
+    cd /var/lib/node_exporter/textfile && touch dns_monitor.prom && chmod 755 dns_monitor.prom && echo > dns_monitor.prom
 }
 
 #对获取的value和预先定义好的value进行对比，判断结果是否正常
@@ -72,10 +73,10 @@ function check_result
     done
     #最后，统计下所有异常的ns的数量，并进行统一输出，用于监控报警
     cost_time=$((delay_time / status_ok))
-    cd /var/lib/node_exporter/textfile && echo -e "ns_status_error $count" >>  dnsplus_monitor.prom
-    cd /var/lib/node_exporter/textfile && echo -e "ns_status_ok $status_ok" >>  dnsplus_monitor.prom
-    cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost $cost_time" >>  dnsplus_monitor.prom
-    cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost_max $delay_time_max" >>  dnsplus_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "ns_status_error $count" >>  dns_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "ns_status_ok $status_ok" >>  dns_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost $cost_time" >>  dns_monitor.prom
+    cd /var/lib/node_exporter/textfile && echo -e "ns_status_cost_max $delay_time_max" >>  dns_monitor.prom
 }
 
 function main

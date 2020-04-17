@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 readonly DOMAIN="monitor.site7x24.net.cn"
 
 #定义的是命令执行的超时时间

@@ -17,7 +17,7 @@ readonly TIMESEClarge="20"
 
 #文件名的随机后缀变量
 readonly KEY=$((RANDOM))
-readonly CFS_ADDR="10.0.2.12:/cfs"
+readonly CFS_ADDR="10.0.2.31:/cfs"
 #定义的是功能监控的写入目录
 readonly MONITOR_PATH="/root/nfs"
 

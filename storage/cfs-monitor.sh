@@ -56,17 +56,19 @@ function check_result
 #写入耗时部分，增加了纳秒统计，否则，无法进行精确比较date +%s%N，如果不需要纳秒级别统计，可以改为date +%s
 function check_performance
 {
-    local Begin_time=$(date +%s%N)
-    timeout $TIMESEClarge dd if=/dev/zero of=$MONITOR_PATH/cfs_monitor.performance."$KEY" bs=1MB count=100 2>/dev/null
-    local End_time=$(date +%s%N)
-    local time_result=$((End_time - Begin_time))
-    log_info "cfs_monitor.performance.$KEY write finished!!! Cost is $time_result" >> $LOGFILE 
-    if [ "$(ll $MONITOR_PATH/cfs_monitor.performance."$KEY"|awk -F" "  '{print $5}')" -eq 100000000 ];then
-        cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb 0\ncfs_monitor_time_100mb $time_result" >> cfs_monitor.prom
-    else
-        cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb -1\ncfs_monitor_time_100mb $time_result" >> cfs_monitor.prom
-    fi
-    rm -f $MONITOR_PATH/cfs_monitor.performance."$KEY"
+    for mountpath in ${Mountlist[@]};do
+        local Begin_time=$(date +%s%N)
+        timeout $TIMESEClarge dd if=/dev/zero of=$mountpath/cfs_monitor.performance."$KEY" bs=1MB count=100 2>/dev/null
+        local End_time=$(date +%s%N)
+        local time_result=$((End_time - Begin_time))
+   
+        if [ "$(ll $mountpath/cfs_monitor.performance."$KEY"|awk -F" "  '{print $5}')" -eq 100000000 ];then
+            cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb_$mountpath 0\ncfs_monitor_time_100mb_$mountpath $time_result" >> cfs_monitor.prom
+        else
+            cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb_$mountpath -1\ncfs_monitor_time_100mb_$mountpath $time_result" >> cfs_monitor.prom
+        fi
+        rm -f $mountpath/cfs_monitor.performance."$KEY"
+    done
 }
 
 function main

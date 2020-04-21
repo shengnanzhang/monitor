@@ -36,7 +36,6 @@ function check_result
 {
     for mountpath in ${Mountlist[@]};do
     
-    
         cd $mountpath && timeout $TIMESECsmall echo $MD5 > cfs_monitor."$KEY"
 
         local result=$( timeout $TIMESECsmall cat $mountpath/cfs_monitor."$KEY")

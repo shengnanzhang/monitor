@@ -76,7 +76,7 @@ function main
     check_cfs
     check_prometheus
     check_result
-   # check_performance
+    check_performance
 }
 
 main

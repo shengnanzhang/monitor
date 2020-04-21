@@ -45,9 +45,9 @@ function check_result
         cd $mountpath && timeout $TIMESECsmall /usr/bin/rm -f cfs_monitor."$KEY"
 
         if [ "$result" == "$MD5" ];then
-            cd /var/lib/node_exporter/textfile && echo "nfs_$mountpath_monitor_status 0" > cfs_monitor.prom
+            cd /var/lib/node_exporter/textfile && echo "nfs_monitor_status_$mountpath 0" > cfs_monitor.prom
         else
-            cd /var/lib/node_exporter/textfile && echo "nfs_$mountpath_monitor_status 1" > cfs_monitor.prom
+            cd /var/lib/node_exporter/textfile && echo "nfs_monitor_status_$mountpath 1" > cfs_monitor.prom
         fi
     done
 }

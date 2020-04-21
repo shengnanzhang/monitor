@@ -60,12 +60,12 @@ function check_performance
         local End_time=$(date +%s%N)
         local time_result=$((End_time - Begin_time))
 
-        if [ "$(md5sum $mountpath/cfs_monitor.performance."$KEY" |grep -c $MD5)" -eq 1 ];then
+        if [ "$(md5sum "$mountpath"/cfs_monitor.performance."$KEY" |grep -c $MD5)" -eq 1 ];then
             cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb_$mountpath 0\ncfs_monitor_time_100mb_$mountpath $time_result" >> cfs_monitor.prom
         else
             cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb_$mountpath -1\ncfs_monitor_time_100mb_$mountpath $time_result" >> cfs_monitor.prom
         fi
-        rm -f $mountpath/cfs_monitor.performance."$KEY"
+        rm -f "$mountpath"/cfs_monitor.performance."$KEY"
     done
 }
 

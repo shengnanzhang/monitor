@@ -20,7 +20,6 @@ readonly KEY=$((RANDOM))
 #检查输出文件的目录，文件和权限
 function check_prometheus
 {
-    mkdir -p $MONITOR_PATH
     mkdir -p  /var/lib/node_exporter/textfile
     cd /var/lib/node_exporter/textfile && touch cfs_monitor.prom && chmod 755 cfs_monitor.prom
 }

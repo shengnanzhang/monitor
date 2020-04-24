@@ -1,5 +1,6 @@
 #!/bin/bash
 #set encoding=utf-8
+set -x
 #代码规范遵循shellcheck.net的要求
 #建议：使用一个非线上账号进行相关的功能验证，会更加安全，这样即使有问题，也不会将系统文件给误删除！！！
 
@@ -12,7 +13,7 @@ readonly MD5="0f86d7c5a6180cf9584c1d21144d85b0"
 #定义的是命令执行的超时时间
 readonly TIMESECsmall="3"
 readonly TIMESEClarge="20"
-Mountlist=("/disk/cfs-generic" "/disk/cfs-capacity" “/disk/ssd” “/disk/hdd”)
+Mountlist=("/disk/cfs-generic" "/disk/cfs-capacity" "/disk/ssd" "/disk/hdd")
 
 #文件名的随机后缀变量
 readonly KEY=$((RANDOM))
@@ -46,9 +47,9 @@ function check_result
         cd $mountpath && timeout $TIMESECsmall /usr/bin/rm -f cfs_monitor."$KEY"
 
         if [ "$result" == "$MD5" ];then
-            cd /var/lib/node_exporter/textfile && echo "nfs_monitor_status_$mountpath 0" >> cfs_monitor.prom
+            cd /var/lib/node_exporter/textfile && echo "nfs_monitor_status{path=$mountpath} 0" >> cfs_monitor.prom
         else
-            cd /var/lib/node_exporter/textfile && echo "nfs_monitor_status_$mountpath 1" >> cfs_monitor.prom
+            cd /var/lib/node_exporter/textfile && echo "nfs_monitor_status{path=$mountpath} 1" >> cfs_monitor.prom
         fi
     done
 }
@@ -64,9 +65,9 @@ function check_performance
         local time_result=$((End_time - Begin_time))
 
         if [ "$(md5sum "$mountpath"/cfs_monitor.performance."$KEY" |grep -c $MD5)" -eq 1 ];then
-            cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb_$mountpath 0\ncfs_monitor_time_100mb_$mountpath $time_result" >> cfs_monitor.prom
+            cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb{path=$mountpath} 0\ncfs_monitor_time_100mb{path=$mountpath} $time_result" >> cfs_monitor.prom
         else
-            cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb_$mountpath -1\ncfs_monitor_time_100mb_$mountpath $time_result" >> cfs_monitor.prom
+            cd /var/lib/node_exporter/textfile && echo -e "cfs_monitor_100mb{path=$mountpath} -1\ncfs_monitor_time_100mb{path=$mountpath} $time_result" >> cfs_monitor.prom
         fi
         rm -f "$mountpath"/cfs_monitor.performance."$KEY"
     done

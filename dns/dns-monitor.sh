@@ -35,7 +35,7 @@ function check_result
 {
     #计数器，统计请求错误的ns的ip的数量
     count=0
-    status_ok=0
+    status_ok=-1
     delay_time=0
     delay_time_max=0
     

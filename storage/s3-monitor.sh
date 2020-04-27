@@ -5,7 +5,7 @@ readonly URL="http://chaos-monitor.s3.cn-north-1.jdcloud-oss.com/5g-unlocks-a-wo
 #将输出结果默认赋值
 result="-1"
 s3_monitor_status="-1"
-MD5="71cfb9febe321ad91f0d58e1c2c50e46"
+MD5="71cfb9febe321ad91f0d58e1c2c50e46  -"
 
 #检查输出文件的目录，文件和权限
 function check_prometheus
@@ -18,11 +18,11 @@ function check_prometheus
 function check_result
 {
     local start=$(date +%s%N)
-    result=$( timeout $TIMESEC curl -s $URL|ms5sum)
+    result=$(timeout $TIMESEC curl -s $URL|md5sum)
     local end=$(date +%s%N)
     local cost=$[$end-$start]
 
-    if [ "$(echo $result|grep -c $MD5)" -eq 1 ];then
+    if [ "$result"=="$MD5" ];then
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
     else
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 1\ns3_read_cost $cost" > s3_monitor.prom

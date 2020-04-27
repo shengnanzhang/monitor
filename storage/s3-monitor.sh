@@ -1,16 +1,11 @@
 #!/bin/bash
-#set -x
-#set encoding=utf-8
-source ./log.sh
-#定义的是云存储文件的内容
-readonly VALUE="success"
-readonly LOGFILE="/var/log/s3-monitor.log"
 #定义的是命令执行的超时时间
-readonly TIMESEC="3"
-readonly URL="http://monitor.s3-internal.cn-east-2.jdcloud-oss.com/s3-monitor.txt"
+readonly TIMESEC="30"
+readonly URL="http://chaos-monitor.s3.cn-north-1.jdcloud-oss.com/5g-unlocks-a-world-of-opportunities-cn.pdf"
 #将输出结果默认赋值
 result="-1"
 s3_monitor_status="-1"
+MD5="71cfb9febe321ad91f0d58e1c2c50e46"
 
 #检查输出文件的目录，文件和权限
 function check_prometheus
@@ -26,12 +21,8 @@ function check_result
     result=$( timeout $TIMESEC curl -s $URL)
     local end=$(date +%s%N)
     local cost=$[$end-$start]
-   
-    #如果下面打印log的部分，放到cost的上面，那么cost的耗时就会增加非常多，比系统的time命令执行整个脚本得到的时间还高
-    log_info $result >> $LOGFILE
 
-    
-    if [ "$result" == "$VALUE" ];then
+    if [ "$(md5sum $result |grep -c $MD5)" -eq 1 ];then
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
     else
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 1\ns3_read_cost $cost" > s3_monitor.prom

@@ -18,11 +18,11 @@ function check_prometheus
 function check_result
 {
     local start=$(date +%s%N)
-    result=$( timeout $TIMESEC curl -s $URL)
+    result=$( timeout $TIMESEC curl -s $URL|ms5sum)
     local end=$(date +%s%N)
     local cost=$[$end-$start]
 
-    if [ "$(md5sum $result |grep -c $MD5)" -eq 1 ];then
+    if [ "$(echo $result|grep -c $MD5)" -eq 1 ];then
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 0\ns3_read_cost $cost" > s3_monitor.prom
     else
         cd /var/lib/node_exporter/textfile && echo -e "s3_monitor_status 1\ns3_read_cost $cost" > s3_monitor.prom

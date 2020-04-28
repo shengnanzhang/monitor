@@ -13,7 +13,7 @@ readonly MD5="0f86d7c5a6180cf9584c1d21144d85b0"
 #定义的是命令执行的超时时间
 readonly TIMESECsmall="3"
 readonly TIMESEClarge="20"
-Mountlist=("/disk/cfs-generic" "/disk/cfs-capacity" "/disk/ssd" "/disk/hdd")
+Mountlist=("/disk/cfs-generic-A" "/disk/cfs-generic-B" "/disk/cfs-capacity-A" "/disk/ssd" "/disk/hdd")
 
 #文件名的随机后缀变量
 readonly KEY=$((RANDOM))
